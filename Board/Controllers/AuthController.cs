@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Board.Data;
 using Board.DTO;
@@ -39,7 +40,7 @@ namespace Board.Controllers
         public ActionResult<string> registration(UserRegistration obj){
             var flag = Context.FindByUserName(obj.UserName); 
             if(flag != null){
-                return "User Already exist";
+                return Unauthorized("User Already exist");
             }
             User obj1 = new User();
             obj1.UserName = obj.UserName;
@@ -51,6 +52,11 @@ namespace Board.Controllers
             obj1.LastUpdatedDate = DateTime.Now;
             Context.AddUser(obj1);    
             return "User Added";
+        }
+        [Authorize]
+        [HttpGet("getUser")]    
+        public IEnumerable<User> getDetails(){            
+            return Context.GetAllUsers();
         }
     }
 }
