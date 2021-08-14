@@ -41,11 +41,12 @@ namespace Board
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                
                 // app.UseSwagger();
                 // app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Board v1"));
             }
-
+            app.UseDeveloperExceptionPage();
+            
             app.UseHttpsRedirection();
 
             app.UseRouting();
