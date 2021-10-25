@@ -12,33 +12,33 @@ using Microsoft.AspNetCore.Mvc;
 namespace Board.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        public AuthController(IUserRepository context,ITokenService TokenService){
-            Context = context;
+        public AuthController(IUserRepository repository,ITokenService TokenService){
+            Repository = repository;
             this.TokenService = TokenService;
         }
 
-        public IUserRepository Context { get; }
+        public IUserRepository Repository { get; }
         public ITokenService TokenService { get; }
         
         [AllowAnonymous]
         [HttpPost("login")]
-        public ActionResult<string> login(UserRegistration obj){
-            var flag = Context.FindByUserName(obj.UserName); 
+        public IActionResult login(User obj){
+            var flag = Repository.FindByUserName(obj.UserName); 
             if(flag == null){
                 return Unauthorized("Invalid User Name");
             }
             if(flag.Password!=obj.Password){
                 return Unauthorized("Invalid Password");
             }
-            return TokenService.createToken(flag);
+            return Ok(TokenService.createToken(flag));
         }
         [AllowAnonymous]
         [HttpPost("register")]
         public ActionResult<string> registration(UserRegistration obj){
-            var flag = Context.FindByUserName(obj.UserName); 
+            var flag = Repository.FindByUserName(obj.UserName); 
             if(flag != null){
                 return Unauthorized("User Already exist");
             }
@@ -50,13 +50,14 @@ namespace Board.Controllers
             obj1.LastUpdatedBy = obj.UserName;
             obj1.CreatedDate = DateTime.Now;
             obj1.LastUpdatedDate = DateTime.Now;
-            Context.AddUser(obj1);    
+            obj1.Access = "1";
+            Repository.AddUser(obj1);    
             return "User Added";
         }
-        [Authorize]
+        [AllowAnonymous]
         [HttpGet("getUser")]    
         public IEnumerable<User> getDetails(){            
-            return Context.GetAllUsers();
+            return Repository.GetAllUsers();
         }
     }
 }
