@@ -4,14 +4,16 @@ using Board.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Board.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210928053537_DBUpdate1")]
+    partial class DBUpdate1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -110,7 +112,13 @@ namespace Board.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("assignedTo")
+                    b.Property<string>("AssignedTo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("endDate")
@@ -119,16 +127,10 @@ namespace Board.Data.Migrations
                     b.Property<DateTime>("startDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("status")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("taskDetails")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("taskName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("type")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("id");

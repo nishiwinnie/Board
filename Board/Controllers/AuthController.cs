@@ -25,7 +25,7 @@ namespace Board.Controllers
         
         [AllowAnonymous]
         [HttpPost("login")]
-        public ActionResult<string> login(User obj){
+        public IActionResult login(User obj){
             var flag = Repository.FindByUserName(obj.UserName); 
             if(flag == null){
                 return Unauthorized("Invalid User Name");
@@ -33,7 +33,7 @@ namespace Board.Controllers
             if(flag.Password!=obj.Password){
                 return Unauthorized("Invalid Password");
             }
-            return TokenService.createToken(flag);
+            return Ok(TokenService.createToken(flag));
         }
         [AllowAnonymous]
         [HttpPost("register")]
@@ -50,6 +50,7 @@ namespace Board.Controllers
             obj1.LastUpdatedBy = obj.UserName;
             obj1.CreatedDate = DateTime.Now;
             obj1.LastUpdatedDate = DateTime.Now;
+            obj1.Access = "1";
             Repository.AddUser(obj1);    
             return "User Added";
         }

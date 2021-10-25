@@ -6,9 +6,9 @@ namespace Repository.Interface
     public interface ITaskRepository
     {
         public List<Task> GetAllTask();
-        public bool AddTask(Task task);
+        public Task AddTask(Task task);
 
-        public bool UpdateTask(Task task);
+        public Task UpdateTask(Task task);
 
         public Task FindById(int id);
 

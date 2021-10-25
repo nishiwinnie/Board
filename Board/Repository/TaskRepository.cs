@@ -13,11 +13,11 @@ namespace Repository
         }
 
         public DataContext Context { get; }
-        public bool AddTask(Task task)
+        public Task AddTask(Task task)
         {
             Context.Task.Add(task);
             this.SaveChanges();
-            return true;
+            return task;
         }
 
         public Task FindById(int id)
@@ -36,9 +36,11 @@ namespace Repository
             Context.SaveChanges();
         }
 
-        public bool UpdateTask(Task task)
+        public Task UpdateTask(Task task)
         {
-            throw new System.NotImplementedException();
+            Context.Task.Update(task);
+            this.SaveChanges();
+            return task;
         }
     }
 }

@@ -27,13 +27,20 @@ namespace Board
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
             services.AddServices(Configuration);
-            services.AddControllers();
             services.AddSecurity(Configuration);
+            services.AddControllers();
             // services.AddSwaggerGen(c =>
             // {
             //     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Board", Version = "v1" });
             // });
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,20 +48,15 @@ namespace Board
         {
             if (env.IsDevelopment())
             {
-                
                 // app.UseSwagger();
                 // app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Board v1"));
             }
-            app.UseDeveloperExceptionPage();
-            
+            app.UseDeveloperExceptionPage();            
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
+            app.UseCors("MyPolicy");
             app.UseAuthentication();
-
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
