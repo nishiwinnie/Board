@@ -25,7 +25,7 @@ namespace Board.Controllers
         
         [AllowAnonymous]
         [HttpPost("login")]
-        public IActionResult login(User obj){
+        public ActionResult login(User obj){
             var flag = Repository.FindByUserName(obj.UserName); 
             if(flag == null){
                 return Unauthorized("Invalid User Name");
@@ -33,14 +33,15 @@ namespace Board.Controllers
             if(flag.Password!=obj.Password){
                 return Unauthorized("Invalid Password");
             }
-            return Ok(TokenService.createToken(flag));
+
+            return Ok(new {token =  TokenService.createToken(flag)});
         }
         [AllowAnonymous]
         [HttpPost("register")]
         public ActionResult<string> registration(UserRegistration obj){
             var flag = Repository.FindByUserName(obj.UserName); 
             if(flag != null){
-                return Unauthorized("User Already exist");
+                return Unauthorized(new {message = "User Already exist"});
             }
             User obj1 = new User();
             obj1.UserName = obj.UserName;
